@@ -1,0 +1,70 @@
+## all
+.idea
+
+## frontend
+# Logs
+PartnerMatch-frontend/logs
+PartnerMatch-frontend/*.log
+PartnerMatch-frontend/npm-debug.log*
+PartnerMatch-frontend/yarn-debug.log*
+PartnerMatch-frontend/yarn-error.log*
+PartnerMatch-frontend/pnpm-debug.log*
+PartnerMatch-frontend/lerna-debug.log*
+
+PartnerMatch-frontend/node_modules
+PartnerMatch-frontend/dist
+PartnerMatch-frontend/dist-ssr
+PartnerMatch-frontend/*.local
+
+# Editor directories and files
+PartnerMatch-frontend/.vscode/*
+PartnerMatch-frontend/!.vscode/extensions.json
+PartnerMatch-frontend/.idea
+PartnerMatch-frontend/.DS_Store
+PartnerMatch-frontend/*.suo
+PartnerMatch-frontend/*.ntvs*
+PartnerMatch-frontend/*.njsproj
+PartnerMatch-frontend/*.sln
+PartnerMatch-frontend/*.sw?
+
+PartnerMatch-frontend/.vercel
+
+## backend
+PartnerMatch-backend/target/
+PartnerMatch-backend/!.mvn/wrapper/maven-wrapper.jar
+PartnerMatch-backend/!**/src/main/**/target/
+PartnerMatch-backend/!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+PartnerMatch-backend/.idea/modules.xml
+PartnerMatch-backend/.idea/jarRepositories.xml
+PartnerMatch-backend/.idea/compiler.xml
+PartnerMatch-backend/.idea/libraries/
+PartnerMatch-backend/*.iws
+PartnerMatch-backend/*.iml
+PartnerMatch-backend/*.ipr
+
+### Eclipse ###
+PartnerMatch-backend/.apt_generated
+PartnerMatch-backend/.classpath
+PartnerMatch-backend/.factorypath
+.project
+PartnerMatch-backend/.settings
+PartnerMatch-backend/.springBeans
+PartnerMatch-backend/.sts4-cache
+
+### NetBeans ###
+/PartnerMatch-backend/nbproject/private/
+/PartnerMatch-backend/nbbuild/
+/PartnerMatch-backend/dist/
+/PartnerMatch-backend/nbdist/
+/PartnerMatch-backend/.nb-gradle/
+PartnerMatch-backend/build/
+PartnerMatch-backend/!**/src/main/**/build/
+PartnerMatch-backend/!**/src/test/**/build/
+
+### VS Code ###
+PartnerMatch-backend/.vscode/
+
+### Mac OS ###
+PartnerMatch-backend/.DS_Store
