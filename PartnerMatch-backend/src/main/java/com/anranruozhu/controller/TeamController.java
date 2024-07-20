@@ -91,7 +91,7 @@ public class TeamController {
         }
 
         boolean admin = userService.isAdmin(request);
-        List<TeamUserVO> teamlist=teamService.listTeam(teamQuery,admin);
+        List<TeamUserVO> teamlist=teamService.listTeam(teamQuery,admin,false);
         //判断当前用户是否加入该队伍
         List<Long> teamIdList = teamlist.stream().map(TeamUserVO::getId).collect(Collectors.toList());
         QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
@@ -112,7 +112,7 @@ public class TeamController {
         return ResultUtils.success(teamlist);
     }
     @GetMapping("/list/page")
-    public BaseResponse<Page<Team>> ListTeamsByPage( TeamQuery teamQuery) {
+    public BaseResponse<Page<Team>> ListTeamsByPage(TeamQuery teamQuery) {
         if(teamQuery==null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -168,7 +168,7 @@ public class TeamController {
         User loginUser = userService.getLoginUser(request);
         teamQuery.setUserId(loginUser.getId());
         boolean admin = userService.isAdmin(loginUser);
-        List<TeamUserVO> teamlist=teamService.listTeam(teamQuery,true);
+        List<TeamUserVO> teamlist=teamService.listTeam(teamQuery,true,false);
         return ResultUtils.success(teamlist);
     }
     /**
@@ -192,7 +192,7 @@ public class TeamController {
                 .collect(Collectors.groupingBy(UserTeam::getTeamId));
        List<Long> idList=new ArrayList<>(listMap.keySet());
        teamQuery.setIdList(idList);
-        val teamlist = teamService.listTeam(teamQuery, true);
+        val teamlist = teamService.listTeam(teamQuery, true,true);
         return ResultUtils.success(teamlist);
     }
 }

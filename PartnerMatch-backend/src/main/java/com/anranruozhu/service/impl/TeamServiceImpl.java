@@ -110,7 +110,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
     }
 
     @Override
-    public List<TeamUserVO> listTeam(TeamQuery teamQuery,boolean isAdmin) {
+    public List<TeamUserVO> listTeam(TeamQuery teamQuery,boolean isAdmin,boolean mySelf) {
         QueryWrapper<Team> queryWrapper=new QueryWrapper<>();
         //1.组合查询条件
         Long id = teamQuery.getId();
@@ -151,14 +151,17 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         }
         Integer status = teamQuery.getStatus();
         //根据队伍状态进行查询
-        TeamStatusEnum statusEnum = TeamStatusEnum.getEnumByValue(status);
-        if(statusEnum==null){
-            statusEnum=TeamStatusEnum.PUBLIC;
+        if(!mySelf){
+            TeamStatusEnum statusEnum = TeamStatusEnum.getEnumByValue(status);
+            if(statusEnum==null){
+                statusEnum=TeamStatusEnum.PUBLIC;
+            }
+            if(!isAdmin&&statusEnum.equals(TeamStatusEnum.PRIVATE)){
+                throw new BusinessException(ErrorCode.NO_AUTH);
+            }
+            queryWrapper.eq("status",statusEnum.getValue());
         }
-        if(!isAdmin&&!statusEnum.equals(TeamStatusEnum.PUBLIC)){
-            throw new BusinessException(ErrorCode.NO_AUTH);
-        }
-        //queryWrapper.eq("status",statusEnum.getValue());
+
         //不展示已过期的队伍。
         //expireTime is null or expireTime after now()
         queryWrapper.and(qw->qw.gt("expireTime",new Date()).or().isNull("expireTime"));
@@ -237,7 +240,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        long teamId = teamJoinRequest.getId();
+        long teamId = teamJoinRequest.getTeamId();
         log.info("id{}",teamId);
         Team team = this.getTeamById(teamId);
         Date expireTime = team.getExpireTime();
@@ -287,19 +290,23 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean quitTeam(TeamQuitRequest teamQuitRequest, User loginUser) {
+        //判断参数的有效性
         if (teamQuitRequest==null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        long teamId = teamQuitRequest.getId();
+        //查看队伍是否过期
+        long teamId = teamQuitRequest.getTeamId();
         Team team = getTeamById(teamId);
         Date expireTime = team.getExpireTime();
         if (expireTime!=null&& expireTime.before(new Date())){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"该队伍已过期");
         }
+        //查询是否属于该队伍
         Long id = loginUser.getId();
         if(!hasJoin(teamId,id)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"未加入该队伍");
         }
+        //统计队伍现有多少人
         long count = getTeamNumById(teamId);
         QueryWrapper<UserTeam> queryWrapper=new  QueryWrapper<>();
         queryWrapper.eq("userId",id);
@@ -330,9 +337,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 }
             }
             //删除用户在队伍的记录
-            queryWrapper=new  QueryWrapper<>();
             log.info("delete user team id:{}",id);
-
         }
         return userTeamService.remove(queryWrapper);
     }

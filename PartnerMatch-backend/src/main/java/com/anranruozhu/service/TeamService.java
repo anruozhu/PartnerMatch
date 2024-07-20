@@ -30,9 +30,10 @@ public interface TeamService extends IService<Team> {
     * 查找队伍
     * @param teamQuery
     * @param isAdmin
+    * @param mySelf
     *@retrun
     **/
-   List<TeamUserVO> listTeam(TeamQuery teamQuery,boolean isAdmin);
+   List<TeamUserVO> listTeam(TeamQuery teamQuery,boolean isAdmin,boolean mySelf);
 
    /**
     * 更新队伍信息

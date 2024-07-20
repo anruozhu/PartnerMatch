@@ -196,7 +196,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }else {
             Object ObjectUser = request.getSession().getAttribute(USER_LOGIN_STATE);
             if(ObjectUser==null){
-                throw new BusinessException(ErrorCode.NO_AUTH);
+                throw new BusinessException(ErrorCode.NOT_LOGIN);
             }
             User user = (User) ObjectUser;
             if(Boolean.TRUE.equals(redisSession.opsForValue().get(USER_IS_UPDATE+user.getId()))){
@@ -204,7 +204,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             }
             ObjectUser = request.getSession().getAttribute(USER_LOGIN_STATE);
             if(ObjectUser==null){
-                throw new BusinessException(ErrorCode.NO_AUTH);
+                throw new BusinessException(ErrorCode.NOT_LOGIN);
             }
             return (User)ObjectUser;
         }
