@@ -9,17 +9,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import myAxios from "../plugins/myAxios";
 import {Toast} from "vant";
 import UserCardList from "../components/UserCardList.vue";
 import {UserType} from "../models/user";
 
 const isMatchMode = ref<boolean>(false);
-
 const userList = ref([]);
 const loading = ref(true);
 
+onMounted(() => {})
 /**
  * 加载数据
  */

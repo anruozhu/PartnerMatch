@@ -95,6 +95,7 @@ const formatDateTime = (dateTime: Date) => {
 }
 const preJoinTeam = (team: TeamType) => {
   joinTeamId.value = team.id;
+  console.log(joinTeamId.value)
   if (team.status === 0) {
     doJoinTeam()
   } else {
@@ -114,16 +115,21 @@ const doJoinTeam = async () => {
   if (!joinTeamId.value) {
     return;
   }
+  console.log("doJoinTeam",joinTeamId.value)
   const res = await myAxios.post('/team/join', {
     teamId: joinTeamId.value,
     password: password.value
   });
+  console.log("doJoinTeam",joinTeamId.value)
   if (res?.code === 0) {
+
     Toast.success('加入成功');
     doJoinCancel();
+
   } else {
     Toast.fail('加入失败' + (res.description ? `，${res.description}` : ''));
   }
+  window.location.reload();
 }
 
 /**
@@ -141,32 +147,34 @@ const doUpdateTeam = (id: number) => {
 
 /**
  * 退出队伍
- * @param id
+ * @param teamId
  */
-const doQuitTeam = async (id: number) => {
+const doQuitTeam = async (teamId: number) => {
   const res = await myAxios.post('/team/quit', {
-    teamId: id
+    teamId: teamId
   });
   if (res?.code === 0) {
     Toast.success('操作成功');
   } else {
     Toast.fail('操作失败' + (res.description ? `，${res.description}` : ''));
   }
+  window.location.reload();
 }
 
 /**
  * 解散队伍
- * @param id
+ * @param teamId
  */
-const doDeleteTeam = async (id: number) => {
+const doDeleteTeam = async (teamId: number) => {
   const res = await myAxios.post('/team/delete', {
-    id,
+    teamId,
   });
   if (res?.code === 0) {
     Toast.success('操作成功');
   } else {
     Toast.fail('操作失败' + (res.description ? `，${res.description}` : ''));
   }
+  window.location.reload();
 }
 
 </script>

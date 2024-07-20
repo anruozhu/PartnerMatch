@@ -1,4 +1,5 @@
 import axios, {AxiosInstance} from "axios";
+import { Loading, Toast } from "vant";
 
 //const isDev = process.env.NODE_ENV === 'development';
 
@@ -8,10 +9,27 @@ const myAxios: AxiosInstance = axios.create({
 
 myAxios.defaults.withCredentials = true; // 配置为true
 
+let loading;
+function startLoading(){
+    loading=Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+        duration: 0,
+        loadingType: 'spinner',
+        overlay: true,
+        overlayStyle: {
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        },
+    })
+}
+function endLoading(){
+    loading.clear()
+}
 // Add a request interceptor
 myAxios.interceptors.request.use(function (config) {
     console.log('我要发请求啦', config)
     // Do something before request is sent
+    startLoading();
     return config;
 }, function (error) {
     // Do something with request error
@@ -27,6 +45,7 @@ myAxios.interceptors.response.use(function (response) {
         window.location.href = `/user/login?redirect=${redirectUrl}`;
     }
     // Do something with response data
+    endLoading();
     return response.data;
 }, function (error) {
     // Do something with response error
